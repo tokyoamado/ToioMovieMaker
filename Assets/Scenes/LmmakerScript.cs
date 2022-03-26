@@ -5,12 +5,12 @@ using toio;
 
 public class LmmakerScript : MonoBehaviour
 {
-    const int numCubes = 2;
+    public int numCubes = 2;
     public ConnectType connectType;
 
     int mode = 0;  // 0:stop, 1:record, 2:play
-    int[] phase = new int[numCubes];
-    List<Vector2>[] pos = new List<Vector2>[numCubes];
+    int[] phase;
+    List<Vector2>[] pos;
 
     float intervalTime = 0.1f;
     float elapsedTime = 0.0f;
@@ -19,6 +19,8 @@ public class LmmakerScript : MonoBehaviour
 
     async void Start()
     {
+        phase = new int[numCubes];
+        pos = new List<Vector2>[numCubes];
         cm = new CubeManager(connectType);
         await cm.MultiConnect(numCubes);
         foreach(var handle in cm.handles)

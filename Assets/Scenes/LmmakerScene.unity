@@ -3572,4 +3572,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a512fc4ac57e4d858e719ec50ec47e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectType: 0
+  numCubes: 2
+  connectType: 2
