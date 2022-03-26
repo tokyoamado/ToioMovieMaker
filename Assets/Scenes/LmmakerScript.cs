@@ -10,7 +10,7 @@ public class LmmakerScript : MonoBehaviour
     public float margin = 1.05f;
     public ConnectType connectType;
 
-    int mode = 0;  // 0:stop, 1:record, 2:play
+    int mode = 0;  // 0:reset, 1:record, 2:play, 3:pause
     int[] phase;
     List<Vector2>[] pos;
 
@@ -50,7 +50,7 @@ public class LmmakerScript : MonoBehaviour
             {
                 switch(mode)
                 {
-                    case 0:  // stop
+                    case 0:  // reset
                         phase[i] = 0;
                         if(pos[i].Count > 0)
                             cm.handles[i].Move2Target(pos[i][0], 50, durationTime, 8).Exec();
@@ -65,6 +65,9 @@ public class LmmakerScript : MonoBehaviour
                             cm.handles[i].Move2Target(pos[i][phase[i]], 50, durationTime, 8).Exec();
                         }
                         break;
+                    case 3:  // pause
+                        cm.handles[i].Stop();
+                        break;
                 }
             }
         }
@@ -72,7 +75,8 @@ public class LmmakerScript : MonoBehaviour
 
     public void Rec() { mode = 1; }
     public void Play() { mode = 2; }
-    public void Stop() { mode = 0; }
+    public void Reset() { mode = 0; }
+    public void Pause() { mode = 3; }
     public void Clear()
     {
         mode = 0;
