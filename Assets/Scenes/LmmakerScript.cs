@@ -6,19 +6,25 @@ using toio;
 public class LmmakerScript : MonoBehaviour
 {
     public int numCubes = 2;
+    public float samplingTime = 0.25f;
+    public float margin = 1.05f;
     public ConnectType connectType;
 
     int mode = 0;  // 0:stop, 1:record, 2:play
     int[] phase;
     List<Vector2>[] pos;
 
-    float intervalTime = 0.1f;
-    float elapsedTime = 0.0f;
+    float intervalTime;
+    float elapsedTime;
+    int durationTime;
 
     CubeManager cm;
 
     async void Start()
     {
+        intervalTime = samplingTime;
+        elapsedTime = 0.0f;
+        durationTime = (int)(samplingTime * 1000f * margin);
         phase = new int[numCubes];
         pos = new List<Vector2>[numCubes];
         cm = new CubeManager(connectType);
@@ -47,7 +53,7 @@ public class LmmakerScript : MonoBehaviour
                     case 0:  // stop
                         phase[i] = 0;
                         if(pos[i].Count > 0)
-                            cm.handles[i].Move2Target(pos[i][0]).Exec();
+                            cm.handles[i].Move2Target(pos[i][0], 50, durationTime, 8).Exec();
                         break;
                     case 1:  // record
                         pos[i].Add(cm.handles[i].cube.pos);
@@ -56,7 +62,7 @@ public class LmmakerScript : MonoBehaviour
                         if(phase[i] < pos[i].Count - 1)
                         {
                             phase[i]++;
-                            cm.handles[i].Move2Target(pos[i][phase[i]]).Exec();
+                            cm.handles[i].Move2Target(pos[i][phase[i]], 50, durationTime, 8).Exec();
                         }
                         break;
                 }

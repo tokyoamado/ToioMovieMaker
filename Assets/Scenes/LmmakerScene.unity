@@ -3573,4 +3573,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numCubes: 2
+  samplingTime: 0.25
+  margin: 1.05
   connectType: 2
