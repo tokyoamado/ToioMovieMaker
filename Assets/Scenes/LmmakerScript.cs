@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using toio;
 
 public class LmmakerScript : MonoBehaviour
@@ -9,6 +10,7 @@ public class LmmakerScript : MonoBehaviour
     public float samplingTime = 0.25f;
     public float margin = 1.05f;
     public ConnectType connectType;
+    public GameObject[] toggles;
 
     int mode = 0;  // 0:reset, 1:record, 2:play, 3:pause
     int[] phase;
@@ -48,6 +50,8 @@ public class LmmakerScript : MonoBehaviour
             elapsedTime = 0.0f;
             for(int i = 0; i < cm.handles.Count; i++)
             {
+                Toggle toggle = toggles[i].GetComponent<Toggle>();
+                if(!toggle.isOn) continue;
                 switch(mode)
                 {
                     case 0:  // reset
@@ -82,5 +86,10 @@ public class LmmakerScript : MonoBehaviour
         mode = 0;
         for(int i = 0; i < numCubes; i++)
             pos[i].Clear();
+    }
+
+    public void onToggleChange(int i) {
+        Toggle toggle = toggles[i].GetComponent<Toggle>();
+        cm.handles[i].RotateByDeg(30, 20).Exec();
     }
 }
