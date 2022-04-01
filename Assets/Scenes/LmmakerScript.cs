@@ -84,8 +84,11 @@ public class LmmakerScript : MonoBehaviour
     public void Clear()
     {
         mode = 0;
-        for(int i = 0; i < numCubes; i++)
+        for(int i = 0; i < numCubes; i++) {
+            Toggle toggle = toggles[i].GetComponent<Toggle>();
+            if(!toggle.isOn) continue;
             pos[i].Clear();
+        }
     }
 
     public void onToggleChange(int i) {
