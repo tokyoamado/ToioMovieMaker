@@ -17,16 +17,13 @@ public class LmmakerScript : MonoBehaviour
     List<Vector2>[] pos;
 
     float intervalTime;
-    float elapsedTime;
+    float elapsedTime = 0f;
     int durationTime;
 
     CubeManager cm;
 
     async void Start()
     {
-        intervalTime = samplingTime;
-        elapsedTime = 0.0f;
-        durationTime = (int)(samplingTime * 1000f * margin);
         phase = new int[numCubes];
         pos = new List<Vector2>[numCubes];
         cm = new CubeManager(connectType);
@@ -44,6 +41,8 @@ public class LmmakerScript : MonoBehaviour
 
     void Update()
     {
+        intervalTime = samplingTime;
+        durationTime = (int)(samplingTime * 1000f * margin);
         elapsedTime += Time.deltaTime;
         if(elapsedTime >= intervalTime && cm.synced)
         {
