@@ -57,7 +57,6 @@ public class LmmakerScript : MonoBehaviour
             for(int i = 0; i < cm.handles.Count; i++)
             {
                 Toggle toggle = toggles[i].GetComponent<Toggle>();
-                if(!toggle.isOn) continue;
                 switch(mode)
                 {
                     case 0:  // reset
@@ -66,10 +65,17 @@ public class LmmakerScript : MonoBehaviour
                             cm.handles[i].Move2Target(pos[i][0], 50, durationTime, 8).Exec();
                         break;
                     case 1:  // record
-                        pos[i].Add(cm.handles[i].cube.pos);
+                        if(toggle.isOn)
+                            pos[i].Add(cm.handles[i].cube.pos);
+                        else {
+                            if(phase[i] < pos[i].Count - 1) {
+                                phase[i]++;
+                                cm.handles[i].Move2Target(pos[i][phase[i]], 50, durationTime, 8).Exec();
+                            }
+                        }
                         break;
                     case 2:  // play
-                        if(phase[i] < pos[i].Count - 1)
+                        if(toggle.isOn && phase[i] < pos[i].Count - 1)
                         {
                             phase[i]++;
                             cm.handles[i].Move2Target(pos[i][phase[i]], 50, durationTime, 8).Exec();
