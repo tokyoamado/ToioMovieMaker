@@ -32,10 +32,17 @@ public class LmmakerScript : MonoBehaviour
         {
             handle.borderRect = new RectInt(34, 34, 949, 898);
         }
+        for(int i = 0; i < toggles.Length; i++)
+        {
+            Toggle toggle = toggles[i].GetComponent<Toggle>();
+            toggle.isOn = false;
+        }
         for(int i = 0; i < numCubes; i++)
         {
             pos[i] = new List<Vector2>();
             phase[i] = 0;
+            Toggle toggle = toggles[i].GetComponent<Toggle>();
+            toggle.isOn = true;
         }
     }
 
@@ -91,7 +98,9 @@ public class LmmakerScript : MonoBehaviour
     }
 
     public void onToggleChange(int i) {
-        Toggle toggle = toggles[i].GetComponent<Toggle>();
-        cm.handles[i].RotateByDeg(30, 20).Exec();
+        if(i < numCubes) {
+            Toggle toggle = toggles[i].GetComponent<Toggle>();
+            cm.handles[i].RotateByDeg(30, 20).Exec();
+        }
     }
 }
