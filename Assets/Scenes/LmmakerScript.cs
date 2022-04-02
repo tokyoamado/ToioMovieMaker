@@ -35,6 +35,7 @@ public class LmmakerScript : MonoBehaviour
         for(int i = 0; i < toggles.Length; i++)
         {
             Toggle toggle = toggles[i].GetComponent<Toggle>();
+            toggles[i].SetActive(false);
             toggle.isOn = false;
         }
         for(int i = 0; i < numCubes; i++)
@@ -42,6 +43,7 @@ public class LmmakerScript : MonoBehaviour
             pos[i] = new List<Vector2>();
             phase[i] = 0;
             Toggle toggle = toggles[i].GetComponent<Toggle>();
+            toggles[i].SetActive(true);
             toggle.isOn = true;
         }
     }
