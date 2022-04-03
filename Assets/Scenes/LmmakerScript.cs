@@ -7,18 +7,19 @@ using toio;
 public class LmmakerScript : MonoBehaviour
 {
     public int numCubes = 2;
-    public float samplingTime = 0.25f;
-    public float margin = 1.05f;
+    public float sampling = 0.25f;
+    public int duration = 263;
+    public float cameraSampling = 0.5f;
+    public int cameraDuration = 525;
     public ConnectType connectType;
     public GameObject[] toggles;
+    public GameObject cameraID;
 
     int mode = 0;  // 0:reset, 1:record, 2:play, 3:pause
     int[] phase;
     List<Vector2>[] pos;
 
-    float intervalTime;
-    float elapsedTime = 0f;
-    int durationTime;
+    float[] elapsedTime;
 
     CubeManager cm;
 
@@ -26,6 +27,7 @@ public class LmmakerScript : MonoBehaviour
     {
         phase = new int[numCubes];
         pos = new List<Vector2>[numCubes];
+        elapsedTime = new float[numCubes];
         cm = new CubeManager(connectType);
         await cm.MultiConnect(numCubes);
         foreach(var handle in cm.handles)
@@ -42,6 +44,7 @@ public class LmmakerScript : MonoBehaviour
         {
             pos[i] = new List<Vector2>();
             phase[i] = 0;
+            elapsedTime[i] = 0.0f;
             Toggle toggle = toggles[i].GetComponent<Toggle>();
             toggles[i].SetActive(true);
             toggle.isOn = true;
@@ -50,14 +53,25 @@ public class LmmakerScript : MonoBehaviour
 
     void Update()
     {
-        intervalTime = (mode == 0) ? 0.2f : samplingTime;
-        durationTime = (int)(samplingTime * 1000f * margin);
-        elapsedTime += Time.deltaTime;
-        if(elapsedTime >= intervalTime && cm.synced)
-        {
-            elapsedTime = 0.0f;
-            for(int i = 0; i < cm.handles.Count; i++)
-            {
+        InputField cidField = cameraID.GetComponent<InputField>();
+        int cid = 0;
+        int.TryParse(cidField.text, out cid);
+int x = 0;
+        float intervalTime;
+        int durationTime;
+        for(int i = 0; i < cm.handles.Count; i++) {
+            if(i == cid) {
+                intervalTime = (mode == 0) ? 0.2f : cameraSampling;
+                durationTime = cameraDuration;
+            } else {
+                intervalTime = (mode == 0) ? 0.2f : sampling;
+                durationTime = duration;
+            }
+
+            elapsedTime[i] += Time.deltaTime;
+            if(elapsedTime[i] >= intervalTime && cm.IsControllable(cm.handles[i])) {
+                elapsedTime[i] = 0.0f;
+                cm.handles[i].Update();
                 Toggle toggle = toggles[i].GetComponent<Toggle>();
                 switch(mode)
                 {
