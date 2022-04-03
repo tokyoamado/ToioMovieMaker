@@ -50,7 +50,7 @@ public class LmmakerScript : MonoBehaviour
 
     void Update()
     {
-        intervalTime = samplingTime;
+        intervalTime = (mode == 0) ? 0.2f : samplingTime;
         durationTime = (int)(samplingTime * 1000f * margin);
         elapsedTime += Time.deltaTime;
         if(elapsedTime >= intervalTime && cm.synced)
